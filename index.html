@@ -8,7 +8,7 @@
 <title>LOOCKY Vibe-Check</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Baloo+2:wght@700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,wght@1,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&family=Fraunces:ital,wght@1,600&family=Inter+Tight:wght@800&family=Shrikhand&family=Space+Grotesk:wght@700&family=Syne:wght@800&display=swap">
 <style>
 html{-webkit-text-size-adjust:100%}body{margin:0}[hidden]{display:none!important}
 /* Layout: one phone-sized card, one question per screen, sticky action bar at the bottom. Colours = LOOCKY inselLight / loockyDark tokens. */
@@ -51,7 +51,7 @@ body {
 .count { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .bar { height: 6px; border-radius: 99px; background: var(--soft); margin-top: 12px; overflow: hidden; }
 .bar > i { display: block; height: 100%; width: 0; background: var(--brand); border-radius: inherit; transition: width .35s ease; }
-main { flex: 1; padding-block: 28px 24px; }
+main { flex: 1; min-width: 0; padding-block: 28px 24px; }
 section { display: flex; flex-direction: column; gap: 18px; }
 h1, h2 { font-family: var(--font-display); font-weight: 800; letter-spacing: -.025em; line-height: 1.05; margin: 0; text-wrap: balance; }
 h1 { font-size: clamp(34px, 9vw, 44px); }
@@ -139,9 +139,57 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
 .summary { background: var(--surface); border: 1.5px solid var(--line); border-radius: 16px; padding: 14px; font-size: 14px; white-space: pre-wrap; color: var(--muted); max-height: 220px; overflow: auto; }
 .status { font-size: 14px; color: var(--muted); min-height: 1.4em; margin: 0; }
 
+/* Style previews: each one is its own little world, so colours here are literal on purpose. */
+.styles { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+@media (min-width: 520px) { .styles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.stylecard { width: 100%; font: inherit; color: var(--fg); text-align: left; background: var(--surface); border: 2px solid var(--line); border-radius: 22px; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 8px; min-width: 0; transition: border-color .15s, box-shadow .15s; }
+.stylecard[aria-pressed="true"] { border-color: var(--brand); box-shadow: 0 0 0 4px var(--ring); }
+.stylecard:disabled { opacity: .4; cursor: default; }
+.stylecard .meta { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 0 6px 4px; }
+.stylecard .sname { font-weight: 700; }
+.stylecard .sdesc { font-size: 13px; color: var(--muted); }
+.stylecard .pick { font-size: 12px; font-weight: 700; color: var(--brand); white-space: nowrap; }
+.pv { height: 172px; border-radius: 15px; overflow: hidden; padding: 14px; display: flex; flex-direction: column; gap: 10px; position: relative;
+  background: var(--pbg); color: var(--pfg); font-family: var(--pb, "DM Sans", system-ui, sans-serif); }
+.pv-h { font-family: var(--ph); font-weight: var(--phw, 800); font-size: 21px; line-height: 1; color: var(--phc, inherit); letter-spacing: var(--pls, -.01em); }
+.pv-card { background: var(--pcard); color: var(--pcardfg, inherit); border-radius: var(--pr, 14px); border: var(--pborder, 0); box-shadow: var(--pshadow, none);
+  padding: 10px 12px; display: flex; flex-direction: column; gap: 3px; position: relative; }
+.pv-tag { align-self: flex-start; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: var(--ptr, 99px); background: var(--ptag); color: var(--ptagfg); border: var(--ptagborder, 0); text-transform: var(--ptt, none); letter-spacing: var(--ptls, 0); }
+.pv-t { font-family: var(--ph); font-weight: var(--phw, 800); font-size: 18px; line-height: 1.1; color: var(--ptc, inherit); }
+.pv-m { font-size: 11px; opacity: .75; }
+.pv-row { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; gap: 8px; }
+.pv-free { font-size: 11px; font-weight: 700; color: var(--pacc2, var(--pacc)); }
+.pv-btn { font-size: 11px; font-weight: 700; padding: 5px 11px; border-radius: var(--pbr, 99px); background: var(--pacc); color: var(--paccfg); border: var(--pbtnborder, 0); }
+
+.st-insel { --pbg:#F6F4FD; --pfg:#1B1530; --pcard:#FFFFFF; --pacc:#6A4CF0; --paccfg:#fff; --ph:-apple-system, system-ui, "Segoe UI", sans-serif; --pb:-apple-system, system-ui, sans-serif; --phw:700; --pr:18px; --pshadow:0 4px 14px rgba(106,76,240,.14); --ptag:#ECE6FF; --ptagfg:#5A3FD6; }
+.st-swiss { --pbg:#FFFFFF; --pfg:#111; --pcard:#FFFFFF; --pacc:#E3261C; --paccfg:#fff; --ph:"Inter Tight", "Helvetica Neue", Arial, sans-serif; --pls:-.03em; --pr:0; --ptag:transparent; --ptagfg:#111; --ptagborder:1px solid #111; --ptr:0; --pbr:0; --pacc2:#111; }
+.st-swiss .pv-card { border-top: 2px solid #111; padding-left: 0; padding-right: 0; }
+.st-brutal { --pbg:#FFE14D; --pfg:#000; --pcard:#FFFFFF; --pacc:#FF4FA3; --paccfg:#000; --ph:"Space Grotesk", Arial, sans-serif; --phw:700; --pr:6px; --pborder:2.5px solid #000; --pshadow:4px 4px 0 #000; --ptag:#000; --ptagfg:#FFE14D; --ptr:4px; --pbr:4px; --pbtnborder:2px solid #000; --pacc2:#000; }
+.st-med { --pbg:#EFE7DA; --pfg:#3B2A20; --pcard:#FBF7F0; --pacc:#C4552D; --paccfg:#FBF7F0; --pacc2:#5E6B3A; --ph:"Fraunces", Georgia, serif; --phw:600; --pr:44px 44px 12px 12px; --ptag:#5E6B3A; --ptagfg:#FBF7F0; }
+.st-med .pv-h, .st-med .pv-t { font-style: italic; }
+.st-med .pv-card { padding-top: 16px; }
+.st-neon { --pbg:#0B0717; --pfg:#F4F0FF; --pcard:#150F2B; --pacc:#2FF3FF; --paccfg:#0B0717; --pacc2:#2FF3FF; --ph:"Anton", Impact, sans-serif; --phw:400; --pls:.03em; --phc:#FF2FD0; --pborder:1px solid #FF2FD0; --pshadow:0 0 16px rgba(255,47,208,.45); --pr:10px; --ptag:transparent; --ptagfg:#2FF3FF; --ptagborder:1px solid #2FF3FF; --ptt:uppercase; --ptls:.08em; }
+.st-neon .pv-h, .st-neon .pv-t { text-transform: uppercase; text-shadow: 0 0 10px rgba(255,47,208,.7); }
+.st-neon .pv-t { color: #fff; }
+.st-seventies { --pbg:#FFF1DC; --pfg:#4A2412; --pcard:#FFF8EC; --pacc:#E2683C; --paccfg:#FFF8EC; --pacc2:#B8402E; --ph:"Shrikhand", Georgia, serif; --phw:400; --pr:24px; --ptag:#F2A03D; --ptagfg:#4A2412; --pborder:2px solid #4A2412; }
+.st-seventies.pv { background: linear-gradient(to bottom, #FFF1DC 0 52%, #F2A03D 52% 64%, #E2683C 64% 76%, #B8402E 76% 88%, #6B2E2A 88%); }
+.st-y2k { --pbg:#E8F4FF; --pfg:#1A1A2E; --pcard:rgba(255,255,255,.7); --pacc:linear-gradient(180deg,#FFFFFF,#A9A9B8); --paccfg:#1A1A2E; --pacc2:#7A3CFF; --ph:"Syne", Arial, sans-serif; --pr:26px; --pborder:1px solid #fff; --pshadow:inset 0 1px 0 #fff, 0 6px 18px rgba(122,60,255,.18); --ptag:#1A1A2E; --ptagfg:#C9F0FF; --pbtnborder:1px solid #fff; }
+.st-y2k.pv { background: linear-gradient(135deg,#C9F0FF,#F7D6FF 45%,#D7FFE9 75%,#FFF3C4); }
+.st-y2k .pv-btn { box-shadow: 0 2px 6px rgba(0,0,0,.18); }
+.st-editorial { --pbg:#FFFFFF; --pfg:#0E0E0E; --pcard:transparent; --pacc:#0E0E0E; --paccfg:#fff; --ph:"DM Serif Display", Georgia, serif; --phw:400; --pr:0; --pbr:0; --ptag:transparent; --ptagfg:#0E0E0E; --ptt:uppercase; --ptls:.14em; --pacc2:#0E0E0E; }
+.st-editorial .pv-h { font-size: 26px; }
+.st-editorial .pv-t { font-size: 22px; }
+.st-editorial .pv-card { border-top: 1px solid #0E0E0E; padding-left: 0; padding-right: 0; }
+.st-editorial .pv-tag { padding-left: 0; }
+.st-glass { --pbg:#A5B4FC; --pfg:#0F172A; --pcard:rgba(255,255,255,.38); --pacc:#0F172A; --paccfg:#fff; --pacc2:#0F172A; --ph:"DM Sans", system-ui, sans-serif; --phw:700; --pr:20px; --pborder:1px solid rgba(255,255,255,.65); --pshadow:0 8px 24px rgba(15,23,42,.12); --ptag:rgba(255,255,255,.65); --ptagfg:#0F172A; }
+.st-glass.pv { background: radial-gradient(circle at 18% 22%, #7DD3FC 0, transparent 45%), radial-gradient(circle at 88% 75%, #F9A8D4 0, transparent 50%), #A5B4FC; }
+.st-glass .pv-card { -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.st-riso { --pbg:#F7F3EA; --pfg:#1D3FBB; --pcard:transparent; --pacc:#1D3FBB; --paccfg:#F7F3EA; --pacc2:#FF5C8A; --ph:"Archivo Black", Impact, sans-serif; --phw:400; --phc:#FF5C8A; --ptc:#1D3FBB; --pr:0; --pbr:0; --pborder:2px solid #1D3FBB; --pshadow:5px 5px 0 #FF5C8A; --ptag:#FF5C8A; --ptagfg:#F7F3EA; --ptr:0; }
+.st-riso .pv-h { font-size: 24px; text-transform: uppercase; }
+
 @media (prefers-reduced-motion: reduce) {
   .radar .sweep, .radar .pulse { animation: none; }
-  .bar > i, .chip, .card, .btn { transition: none; }
+  .bar > i, .chip, .card, .stylecard, .btn { transition: none; }
 }
 </style>
 
@@ -178,7 +226,7 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
         </svg>
       </div>
       <h1>Hey Gabriel, kurzer Vibe-Check!</h1>
-      <p class="lead">LOOCKY bekommt seinen eigenen Look. 6 schnelle Fragen, ca. 3 Minuten, fast alles nur antippen.</p>
+      <p class="lead">LOOCKY bekommt seinen eigenen Look. 5 schnelle Fragen, ca. 3 Minuten, fast alles nur antippen.</p>
     </section>
 
     <!-- 1 Vibe -->
@@ -249,32 +297,15 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
       </div>
     </section>
 
-    <!-- 4 Font -->
+    <!-- 4 Style -->
     <section data-step="4" hidden>
-      <h2>Welche Schrift fühlt sich nach LOOCKY an?</h2>
-      <p class="lead">Ein Tipp genügt.</p>
-      <div class="cards" data-single="schrift">
-        <button class="card" type="button" data-v="kräftig"><span class="sample f-anton">WAS GEHT JETZT?</span><span class="name">kräftig &amp; plakativ</span></button>
-        <button class="card" type="button" data-v="elegant"><span class="sample f-fraunces">Was geht jetzt?</span><span class="name">elegant</span></button>
-        <button class="card" type="button" data-v="rund"><span class="sample f-baloo">Was geht jetzt?</span><span class="name">rund &amp; freundlich</span></button>
-        <button class="card" type="button" data-v="handgemacht"><span class="sample f-caveat">Was geht jetzt?</span><span class="name">handgemacht</span></button>
-      </div>
+      <h2>Welcher Look passt zu LOOCKY?</h2>
+      <p class="lead">Tipp deinen Favoriten an, gern auch einen zweiten. Feinheiten wie Farben und Schrift machen wir danach.</p>
+      <div class="styles" data-multi="stil" data-max="2" id="styles"></div>
     </section>
 
-    <!-- 5 Colour -->
+    <!-- 5 Examples (optional) -->
     <section data-step="5" hidden>
-      <h2>Violett bleibt. Was kommt dazu?</h2>
-      <p class="lead">Eine zweite Farbe von der Insel, oder gar keine.</p>
-      <div class="cards" data-single="farbe">
-        <button class="card" type="button" data-v="Meer"><span class="swatch"><span style="background:#6A4CF0"></span><span style="background:#17A6A0"></span></span><span class="name">Meer · türkis</span></button>
-        <button class="card" type="button" data-v="Sonne"><span class="swatch"><span style="background:#6A4CF0"></span><span style="background:#F5A524"></span></span><span class="name">Sonne · gelb-orange</span></button>
-        <button class="card" type="button" data-v="Sand"><span class="swatch"><span style="background:#6A4CF0"></span><span style="background:#D2B48C"></span></span><span class="name">Sand &amp; Stein</span></button>
-        <button class="card" type="button" data-v="nur Violett"><span class="swatch"><span style="background:#6A4CF0"></span><span style="background:#ECE6FF"></span></span><span class="name">nur Violett</span></button>
-      </div>
-    </section>
-
-    <!-- 6 Examples (optional) -->
-    <section data-step="6" hidden>
       <h2>Letzte Frage, und die ist optional.</h2>
       <p class="hint" style="margin-top:0">Ein Name reicht. Kannst du auch leer lassen.</p>
       <label class="field" for="t-fan">Eine App oder Marke, die du feierst
@@ -288,8 +319,8 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
       </label>
     </section>
 
-    <!-- 7 Done -->
-    <section data-step="7" hidden>
+    <!-- 6 Done -->
+    <section data-step="6" hidden>
       <div class="done-mark" aria-hidden="true">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
       </div>
@@ -315,14 +346,43 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
 
 <script>
 (function () {
-  var LAST_Q = 6, DONE = 7;
-  var state = { step: 0, vibe: [], leute: [], alter: [], schrift: "", farbe: "",
+  var LAST_Q = 5, DONE = 6;
+  var state = { step: 0, vibe: [], leute: [], alter: [], stil: [],
     laut: 50, nacht: 50, mediterran: 50, offen: 50, feiert: "", nicht: "", sonst: "" };
   var touched = { laut: false, nacht: false, mediterran: false, offen: false };
   var db = null, uid = null, saving = Promise.resolve();
 
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  var STYLES = [
+    ["insel", "Insel Violett", "So sieht LOOCKY heute aus"],
+    ["swiss", "Swiss Clean", "Klar, reduziert, viel Weißraum"],
+    ["editorial", "Magazin", "Große Serifen wie ein Hochglanzheft"],
+    ["glass", "Milchglas", "Weich, transparent, sehr iOS"],
+    ["med", "Mediterran", "Kalkwände, Terrakotta, Oliven"],
+    ["seventies", "70s Sunset", "Retro, warm, groovy"],
+    ["neon", "Neon Night", "Clubnacht mit Glow"],
+    ["brutal", "Brutal Pop", "Laut, kantig, Comic-Kontraste"],
+    ["y2k", "Y2K Chrom", "Holo-Glanz der 2000er"],
+    ["riso", "Siebdruck", "Zwei Farben, roh wie ein Poster"]
+  ];
+  function styleName(id) { for (var i = 0; i < STYLES.length; i++) if (STYLES[i][0] === id) return STYLES[i][1]; return id; }
+  (function buildStyles() {
+    var box = document.getElementById("styles");
+    STYLES.forEach(function (st) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "stylecard"; b.dataset.v = st[0];
+      b.innerHTML = '<div class="pv st-' + st[0] + '" aria-hidden="true"><div class="pv-h">Was geht jetzt?</div>' +
+        '<div class="pv-card"><span class="pv-tag">Beach</span><div class="pv-t">Sunset Session</div>' +
+        '<div class="pv-m">Heute 19:30 · Palma</div><div class="pv-row"><span class="pv-free">3 Plätze frei</span><span class="pv-btn">Anfragen</span></div></div></div>' +
+        '<div class="meta"><span><span class="sname"></span><br><span class="sdesc"></span></span><span class="pick"></span></div>';
+      b.querySelector(".sname").textContent = st[1];
+      b.querySelector(".sdesc").textContent = st[2];
+      b.setAttribute("aria-label", st[1] + ": " + st[2]);
+      box.appendChild(b);
+    });
+  })();
 
   function word(v, l, r) { return v < 35 ? "eher " + l : v > 65 ? "eher " + r : "beides"; }
 
@@ -339,10 +399,12 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
 
     $$("[data-multi]").forEach(function (box) {
       var list = state[box.dataset.multi], max = Number(box.dataset.max || 99);
-      $$(".chip", box).forEach(function (c) {
+      $$(".chip, .stylecard", box).forEach(function (c) {
         var on = list.indexOf(c.dataset.v) > -1;
         c.setAttribute("aria-pressed", on);
         c.disabled = !on && list.length >= max;
+        var pick = c.querySelector(".pick");
+        if (pick) pick.textContent = on ? (list.indexOf(c.dataset.v) === 0 ? "Favorit" : "Nr. 2") : "";
       });
     });
     $$("[data-single]").forEach(function (box) {
@@ -362,15 +424,14 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
     switch (state.step) {
       case 1: return state.vibe.length > 0;
       case 3: return state.leute.length > 0;
-      case 4: return !!state.schrift;
-      case 5: return !!state.farbe;
+      case 4: return state.stil.length > 0;
       default: return true;
     }
   }
 
   function answers() {
     return { vibe: state.vibe, laut: state.laut, nacht: state.nacht, mediterran: state.mediterran, offen: state.offen,
-      leute: state.leute, alter: state.alter, schrift: state.schrift, farbe: state.farbe,
+      leute: state.leute, alter: state.alter, stil: state.stil.map(styleName),
       feiert: state.feiert.trim(), nicht: state.nicht.trim(), sonst: state.sonst.trim() };
   }
 
@@ -383,8 +444,7 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
       "Modern ↔ mediterran/handgemacht: " + a.mediterran + "/100",
       "Insider ↔ offen für alle: " + a.offen + "/100",
       "Leute: " + (a.leute.join(", ") || "–") + (a.alter.length ? " · Alter " + a.alter.join(", ") : ""),
-      "Schrift: " + (a.schrift || "–"),
-      "Zweite Farbe: " + (a.farbe || "–")
+      "Look-Favoriten: " + (a.stil.join(" > ") || "–")
     ];
     if (a.feiert) lines.push("Feiert: " + a.feiert);
     if (a.nicht) lines.push("Auf keinen Fall: " + a.nicht);
@@ -406,7 +466,7 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
 
   function go(step) {
     state.step = step;
-    try { localStorage.setItem("loocky-vibe", JSON.stringify(state)); } catch (e) {}
+    try { localStorage.setItem("loocky-vibe-2", JSON.stringify(state)); } catch (e) {}
     render();
     window.scrollTo(0, 0);
   }
@@ -445,7 +505,7 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
   }
 
   document.addEventListener("click", function (e) {
-    var chip = e.target.closest(".chip");
+    var chip = e.target.closest(".chip, .stylecard");
     if (chip && !chip.disabled) {
       var box = chip.closest("[data-multi]"), key = box.dataset.multi, list = state[key], i = list.indexOf(chip.dataset.v);
       if (i > -1) list.splice(i, 1); else list.push(chip.dataset.v);
@@ -463,11 +523,12 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
 
   // Restore an unfinished draft on this device.
   try {
-    var saved = JSON.parse(localStorage.getItem("loocky-vibe") || "null");
+    var saved = JSON.parse(localStorage.getItem("loocky-vibe-2") || "null");
     if (saved && typeof saved === "object") {
       Object.keys(state).forEach(function (k) { if (k in saved) state[k] = saved[k]; });
       ["laut", "nacht", "mediterran", "offen"].forEach(function (k) { touched[k] = state[k] !== 50; });
-      if (state.step === DONE) state.step = LAST_Q;
+      if (!Array.isArray(state.stil)) state.stil = [];
+      if (state.step >= DONE) state.step = LAST_Q;
     }
   } catch (e) {}
 
